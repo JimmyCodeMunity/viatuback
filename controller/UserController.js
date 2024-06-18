@@ -26,8 +26,7 @@ const createUser = async (req, res) => {
                 email,
                 phone,
                 address,
-                password: hashedPassword,
-                profilepic:req.file.filename
+                password: hashedPassword
             })
             res.status(200).json({ message: "User created Successfully" });
         }
@@ -85,8 +84,52 @@ const getAllUsers = async (req, res) => {
     }
 }
 
+//delete user
+const deleteUserById = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const user = await User.findByIdAndDelete(id, req.body);
+        if(!user){
+            res.status(404).json({message: 'Product not found'})
+        }
+        else{
+            console.log("User deleted successfully")
+            res.status(200).json(user)
+        }
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: error.message})
+        
+    }
+}
+
+const getAllUsersById = async (req, res) => {
+    try {
+      // Get the ID from the request parameters
+      const { id } = req.params;
+  
+      // Find the user by ID
+      const user = await User.findById(id);
+  
+      // If the user is not found, return a 404 response
+      if (!user) {
+        return res.status(404).json({ message: 'User not found with the provided ID' });
+      }
+  
+      // If the user is found, return the user data
+      res.status(200).json(user);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Server error' });
+    }
+  };
+
 module.exports = {
     createUser,
     userLogin,
-    getAllUsers
+    getAllUsers,
+    deleteUserById,
+    getAllUsersById
+    
 }

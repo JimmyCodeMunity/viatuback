@@ -26,8 +26,7 @@ const createStaff = async (req, res) => {
                 email,
                 phone,
                 address,
-                password: hashedPassword,
-                profilepic:req.file.filename
+                password: hashedPassword
             })
             res.status(200).json({ message: "Staff created Successfully" });
         }
@@ -84,8 +83,51 @@ const getAllStaff = async (req, res) => {
     }
 }
 
+//delete user
+const deleteStaffById = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const staff = await Staff.findByIdAndDelete(id, req.body);
+        if(!staff){
+            res.status(404).json({message: 'Product not found'})
+        }
+        else{
+            console.log("Staff deleted successfully")
+            res.status(200).json(staff)
+        }
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: error.message})
+        
+    }
+}
+
+const getStaffDataById = async (req, res) => {
+    try {
+      // Get the ID from the request parameters
+      const { id } = req.params;
+  
+      // Find the user by ID
+      const staff = await Staff.findById(id);
+  
+      // If the user is not found, return a 404 response
+      if (!staff) {
+        return res.status(404).json({ message: 'Staff not found with the provided ID' });
+      }
+  
+      // If the user is found, return the user data
+      res.status(200).json(staff);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Server error' });
+    }
+  };
+
 module.exports = {
     createStaff,
     staffLogin,
-    getAllStaff
+    getAllStaff,
+    deleteStaffById,
+    getStaffDataById
 }

@@ -1,5 +1,5 @@
 const express = require('express');
-const { createProduct, getProducts,getProductById } = require('../controller/ProductController');
+const { createProduct, getProducts,getProductById, deleteProductById } = require('../controller/ProductController');
 
 
 const router = express.Router();
@@ -16,6 +16,10 @@ router.get('/allproducts',getProducts);
 
 //get product by id
 router.get('/allproducts/:id',getProductById)
+
+
+//delete product
+router.delete('/deleteproduct/:id', deleteProductById)
 
 //user account login
 // router.post('/userlogin',userLogin);
